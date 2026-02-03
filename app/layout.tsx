@@ -1,11 +1,12 @@
+import NavBar from './components/NavBar';
 import { Poppins } from 'next/font/google';
 import './globals.css';
 
 const poppins = Poppins({
-  subsets: ['latin'], // Menentukan subset Latin
-  display: 'swap',   // Strategi tampilan font
-  variable: '--font-poppins', // Menetapkan variabel CSS
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'] // Menentukan berat font yang ingin digunakan
+  subsets: ['latin'],
+  display: 'swap', 
+  variable: '--font-poppins',
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
 });
 
 export const metadata = {
@@ -19,8 +20,11 @@ export default function RootLayout({
   children: React.ReactNode 
 }) {
   return (
-    <html lang="en" className={`${poppins.variable}`}>
-      <body className='bg-white text-black'>{children}</body>
+    <html lang="en" className={poppins.variable}>
+      <body className="bg-white text-black">
+        <NavBar />
+        <main>{children}</main>
+      </body>
     </html>
   );
 }
