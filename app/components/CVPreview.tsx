@@ -881,23 +881,31 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
       </div>
 
       {/* CV Preview - Template Based with Paper Size */}
-      <div className={`mx-auto ${getPaperSizeClass()}`}>
+      <div className={`mx-auto bg-white shadow-xl ${getPaperSizeClass()}`}>
         <style jsx global>{`
           @media print {
             @page {
               size: ${currentPaperSize.printSize};
               margin: 0;
             }
-            body {
+            html, body {
+              width: ${currentPaperSize.width};
               margin: 0;
               padding: 0;
             }
             .no-print {
               display: none !important;
             }
-            .cv-preview {
+            #cv-content {
               box-shadow: none !important;
               border-radius: 0 !important;
+              margin: 0 !important;
+              padding: 15mm 20mm !important;
+            }
+          }
+          @media screen {
+            #cv-content {
+              min-height: calc(297mm - 40mm);
             }
           }
         `}</style>

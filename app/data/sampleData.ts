@@ -11,7 +11,7 @@ export const sampleCVData: CVData = {
   github: "https://github.com/johnanderson",
   photo: "",
   template: "modern",
-  summary: "Experienced Full Stack Developer with 5+ years of expertise in building scalable web applications. Proficient in React, Node.js, TypeScript, and cloud technologies. Passionate about creating efficient, user-friendly solutions and mentoring junior developers. Strong problem-solving skills and ability to work in fast-paced, agile environments.",
+  summary: "Full Stack Developer with 5+ years building scalable web applications using React, Node.js, and TypeScript. Passionate about clean code and user-centric solutions.",
   experience: [
     {
       company: "TechCorp Inc.",
@@ -19,7 +19,7 @@ export const sampleCVData: CVData = {
       location: "San Francisco, CA",
       startDate: "2022-01",
       endDate: "",
-      description: "• Led development of microservices architecture serving 1M+ users\n• Improved application performance by 40% through code optimization\n• Mentored team of 5 junior developers\n• Implemented CI/CD pipelines reducing deployment time by 60%"
+      description: "• Led microservices architecture for 1M+ users\n• Improved performance by 40% through optimization\n• Mentored 5 junior developers"
     },
     {
       company: "StartupXYZ",
@@ -27,51 +27,30 @@ export const sampleCVData: CVData = {
       location: "Remote",
       startDate: "2020-03",
       endDate: "2021-12",
-      description: "• Developed and maintained React-based dashboard application\n• Built RESTful APIs using Node.js and Express\n• Integrated third-party payment systems (Stripe, PayPal)\n• Collaborated with design team to implement responsive UI/UX"
-    },
-    {
-      company: "WebSolutions Co.",
-      position: "Junior Developer",
-      location: "New York, NY",
-      startDate: "2019-06",
-      endDate: "2020-02",
-      description: "• Assisted in development of e-commerce platform\n• Fixed bugs and implemented new features\n• Participated in code reviews and agile ceremonies\n• Learned best practices in software development"
+      description: "• Built React dashboard and Node.js APIs\n• Integrated payment systems (Stripe, PayPal)\n• Implemented responsive UI/UX"
     }
   ],
   education: [
     {
       school: "University of California, Berkeley",
-      degree: "Bachelor of Science",
+      degree: "Bachelor of Science in Computer Science",
       field: "Computer Science",
       startDate: "2015-09",
       endDate: "2019-05",
-      description: "GPA: 3.8/4.0\n• Dean's List all semesters\n• President of Computer Science Club\n• Relevant coursework: Data Structures, Algorithms, Web Development, Database Systems"
-    },
-    {
-      school: "Tech Bootcamp",
-      degree: "Full Stack Web Development Certificate",
-      field: "Web Development",
-      startDate: "2019-01",
-      endDate: "2019-04",
-      description: "Intensive 12-week program covering modern web development technologies including React, Node.js, MongoDB, and deployment strategies."
+      description: "GPA: 3.8/4.0 • Dean's List • President of CS Club"
     }
   ],
   skills: [
     "JavaScript/TypeScript",
     "React & Next.js",
-    "Node.js & Express",
-    "Python",
-    "PostgreSQL & MongoDB",
-    "AWS & Docker",
-    "Git & CI/CD",
-    "REST APIs",
-    "GraphQL",
-    "Tailwind CSS"
+    "Node.js",
+    "PostgreSQL",
+    "AWS",
+    "Git"
   ],
   languages: [
     { name: "English", level: "Native" },
-    { name: "Spanish", level: "Intermediate" },
-    { name: "Mandarin", level: "Basic" }
+    { name: "Spanish", level: "Intermediate" }
   ]
 };
 
@@ -86,7 +65,7 @@ export const sampleCVData2: CVData = {
   github: "https://github.com/sarahchen",
   photo: "",
   template: "classic",
-  summary: "Creative UX/UI Designer with 4+ years of experience designing intuitive and engaging digital products. Skilled in user research, wireframing, prototyping, and collaborating with cross-functional teams. Passionate about creating accessible and inclusive design solutions that delight users.",
+  summary: "UX/UI Designer with 4+ years creating intuitive digital products. Skilled in user research, prototyping, and design systems. Passionate about accessible design.",
   experience: [
     {
       company: "DesignHub Agency",
@@ -94,7 +73,7 @@ export const sampleCVData2: CVData = {
       location: "Seattle, WA",
       startDate: "2021-06",
       endDate: "",
-      description: "• Lead designer for 10+ client projects across various industries\n• Conducted user research and usability testing sessions\n• Created design systems and component libraries\n• Collaborated with developers to ensure design implementation"
+      description: "• Lead designer for 10+ client projects\n• Created design systems and component libraries\n• Conducted user research and usability testing"
     },
     {
       company: "ProductCo",
@@ -102,30 +81,26 @@ export const sampleCVData2: CVData = {
       location: "Remote",
       startDate: "2020-02",
       endDate: "2021-05",
-      description: "• Designed mobile app interface for iOS and Android\n• Increased user engagement by 35% through redesign\n• Created interactive prototypes using Figma\n• Participated in design sprints and brainstorming sessions"
+      description: "• Designed mobile app for iOS and Android\n• Increased engagement by 35% through redesign\n• Created interactive prototypes in Figma"
     }
   ],
   education: [
     {
       school: "Rhode Island School of Design",
-      degree: "Bachelor of Fine Arts",
+      degree: "Bachelor of Fine Arts in Graphic Design",
       field: "Graphic Design",
       startDate: "2016-09",
       endDate: "2020-05",
-      description: "Concentration in Digital Media and Interaction Design\n• Portfolio recognized in AIGA Student Competition\n• Teaching Assistant for Intro to Digital Design"
+      description: "Focus: Digital Media and Interaction Design"
     }
   ],
   skills: [
     "Figma",
     "Adobe Creative Suite",
-    "Sketch",
     "Prototyping",
     "User Research",
-    "Wireframing",
     "Design Systems",
-    "HTML/CSS",
-    "Accessibility",
-    "Agile/Scrum"
+    "HTML/CSS"
   ],
   languages: [
     { name: "English", level: "Native" },

@@ -82,7 +82,7 @@ export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CV
   });
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
-
+  const [isOverOnePage, setIsOverOnePage] = useState(false);
   // Auto-save draft every 2 seconds after changes
   useEffect(() => {
     if (onAutoSave) {
@@ -97,8 +97,73 @@ export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CV
     }
   }, [formData, onAutoSave]);
 
+  // Estimate content height to detect if over 1 page
+  useEffect(() => {
+    const estimateHeight = () => {
+      // Approximate heights (in pixels at 96 DPI)
+      const A4_HEIGHT = 1123; // 297mm
+      const HEADER_HEIGHT = 200;
+      const SECTION_SPACING = 40;
+      
+      let totalHeight = HEADER_HEIGHT;
+      
+      // Summary
+      if (formData.summary) {
+        totalHeight += 100 + Math.ceil(formData.summary.length / 100) * 20;
+      }
+      
+      // Experience
+      formData.experience.forEach(exp => {
+        if (exp.company || exp.position) {
+          totalHeight += 80 + Math.ceil((exp.description?.length || 0) / 80) * 18;
+        }
+      });
+      
+      // Education
+      formData.education.forEach(edu => {
+        if (edu.school || edu.degree) {
+          totalHeight += 70 + Math.ceil((edu.description?.length || 0) / 80) * 18;
+        }
+      });
+      
+      // Skills
+      if (formData.skills.some(s => s.trim())) {
+        totalHeight += 60 + Math.ceil(formData.skills.length / 5) * 30;
+      }
+      
+      // Languages
+      if (formData.languages.some(l => l.name)) {
+        totalHeight += 60 + Math.ceil(formData.languages.length / 3) * 40;
+      }
+      
+      totalHeight += SECTION_SPACING * 5; // Between sections
+      
+      setIsOverOnePage(totalHeight > A4_HEIGHT);
+    };
+    
+    estimateHeight();
+  }, [formData]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check if CV is over one page
+    if (isOverOnePage) {
+      const confirmed = confirm(
+        "⚠️ Warning: Your CV content exceeds 1 page!\n\n" +
+        "Recruiters prefer 1-page CVs for better readability.\n\n" +
+        "Recommendations:\n" +
+        "• Shorten descriptions\n" +
+        "• Remove less relevant information\n" +
+        "• Use bullet points instead of paragraphs\n\n" +
+        "Do you want to continue to preview anyway?"
+      );
+      
+      if (!confirmed) {
+        return; // Don't submit if user wants to edit
+      }
+    }
+    
     onSubmit(formData);
   };
 
@@ -192,6 +257,30 @@ export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CV
           </span>
         )}
       </div>
+
+      {/* Page overflow warning */}
+      {isOverOnePage && (
+        <div className="mb-4 bg-red-50 border-2 border-red-500 rounded-lg p-4 shadow-[4px_4px_0px_0px_rgba(239,68,68,0.5)]">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl">⚠️</span>
+            <div className="flex-1">
+              <h3 className="font-bold text-red-900 mb-1">Content Exceeds 1 Page!</h3>
+              <p className="text-sm text-red-800 mb-2">
+                Your CV is estimated to be more than 1 page. Most recruiters prefer concise 1-page CVs.
+              </p>
+              <div className="text-xs text-red-700">
+                <strong>Tips to reduce:</strong>
+                <ul className="list-disc ml-4 mt-1 space-y-0.5">
+                  <li>Shorten experience/education descriptions</li>
+                  <li>Remove older or less relevant positions</li>
+                  <li>Use bullet points instead of long paragraphs</li>
+                  <li>Keep summary brief and impactful (2-3 sentences)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Personal Information */}

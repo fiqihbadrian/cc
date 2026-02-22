@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* TailwindCSS v4 uses @theme directive - editor warning is safe to ignore */
+
 :root {
   --background: #f8f7f4;
   --foreground: #171717;
@@ -9,6 +11,8 @@
   --shadow: 4px 4px 0px #000;
 }
 
+/* @theme is a TailwindCSS v4 feature - this warning is safe to ignore */
+/* postcss-disable-next-line */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -45,16 +49,36 @@ body {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
+    padding: 20mm !important;
+  }
+  
+  /* Remove neobrutalism shadows for print */
+  .cv-preview * {
+    box-shadow: none !important;
   }
   
   /* Prevent page breaks inside important sections */
-  .cv-preview > div {
+  .cv-preview > div > div {
     page-break-inside: avoid;
+    break-inside: avoid;
   }
   
-  /* Remove unnecessary spacing for print */
-  .print\\:p-0 {
-    padding: 0 !important;
+  /* Ensure proper font sizes */
+  .cv-preview h1 {
+    font-size: 24pt !important;
+  }
+  
+  .cv-preview h2 {
+    font-size: 16pt !important;
+  }
+  
+  .cv-preview h3 {
+    font-size: 14pt !important;
+  }
+  
+  .cv-preview p,
+  .cv-preview div {
+    font-size: 10pt !important;
   }
 }
 
