@@ -1,15 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f8f7f4;
   --foreground: #171717;
+  --main: #ffc800;
+  --main-foreground: #000;
+  --border: #000;
+  --shadow: 4px 4px 0px #000;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-main: var(--main);
+  --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 @media print {
@@ -20,11 +36,43 @@
   body {
     margin: 0;
     padding: 0;
+    background: white;
   }
   
   .cv-preview {
     box-shadow: none !important;
     border-radius: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  
+  /* Prevent page breaks inside important sections */
+  .cv-preview > div {
+    page-break-inside: avoid;
+  }
+  
+  /* Remove unnecessary spacing for print */
+  .print\\:p-0 {
     padding: 0 !important;
   }
+}
+
+/* Background Pattern */
+.bg-pattern {
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 36px,
+      rgba(0, 0, 0, 0.03) 36px,
+      rgba(0, 0, 0, 0.03) 38px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 36px,
+      rgba(0, 0, 0, 0.03) 36px,
+      rgba(0, 0, 0, 0.03) 38px
+    );
 }

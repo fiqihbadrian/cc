@@ -1,10 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./ui/card";
+import { Button } from "./ui/button";
+import { Input, Textarea, Label } from "./ui/input";
+import { sampleCVData } from "../data/sampleData";
+import { CVTemplate, templates } from "../types/templates";
 
 interface CVFormProps {
   onBack: () => void;
   onSubmit: (data: CVData) => void;
+  initialData?: CVData;
+  onAutoSave?: (data: CVData) => void;
 }
 
 export interface CVData {
@@ -17,9 +24,13 @@ export interface CVData {
   website: string;
   linkedin: string;
   github: string;
+  photo?: string; // Optional base64 image
   
   // Profile Summary
   summary: string;
+  
+  // Template
+  template: CVTemplate;
   
   // Education
   education: Array<{
@@ -51,8 +62,8 @@ export interface CVData {
   }>;
 }
 
-export default function CVForm({ onBack, onSubmit }: CVFormProps) {
-  const [formData, setFormData] = useState<CVData>({
+export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CVFormProps) {
+  const [formData, setFormData] = useState<CVData>(initialData || {
     fullName: "",
     title: "",
     email: "",
@@ -61,16 +72,67 @@ export default function CVForm({ onBack, onSubmit }: CVFormProps) {
     website: "",
     linkedin: "",
     github: "",
+    photo: "",
     summary: "",
+    template: "modern",
     education: [{ school: "", degree: "", field: "", startDate: "", endDate: "", description: "" }],
     experience: [{ company: "", position: "", location: "", startDate: "", endDate: "", description: "" }],
     skills: [""],
     languages: [{ name: "", level: "" }]
   });
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+  // Auto-save draft every 2 seconds after changes
+  useEffect(() => {
+    if (onAutoSave) {
+      setIsSaving(true);
+      const timer = setTimeout(() => {
+        onAutoSave(formData);
+        setIsSaving(false);
+        setLastSaved(new Date());
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [formData, onAutoSave]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(formData);
+  };
+
+  const handleFillExample = () => {
+    if (confirm("This will replace all current data with example data. Continue?")) {
+      setFormData(sampleCVData);
+    }
+  };
+
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Check file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert("File size must be less than 2MB");
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        alert("Please upload an image file");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, photo: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setFormData({ ...formData, photo: "" });
   };
 
   const addEducation = () => {
@@ -116,416 +178,401 @@ export default function CVForm({ onBack, onSubmit }: CVFormProps) {
   };
 
   return (
-    <div className="w-full max-w-4xl bg-white rounded-lg shadow-2xl border border-gray-200 p-8">
-      <div className="flex flex-col space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold">Create Your CV</h2>
-          <button 
-            onClick={onBack}
-            className="text-gray-600 hover:text-gray-800 font-medium"
-          >
-            ← Back
-          </button>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Personal Information */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Personal Information</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name <span className="text-red-500">*</span>
-                </label>
-                <input 
-                  type="text" 
-                  required
-                  value={formData.fullName}
-                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="John Doe"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Professional Title <span className="text-red-500">*</span>
-                </label>
-                <input 
-                  type="text" 
-                  required
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Software Engineer"
-                />
-              </div>
+    <div className="w-full max-w-4xl">
+      {/* Auto-save indicator */}
+      <div className="mb-4 text-center min-h-[40px] flex items-center justify-center">
+        {isSaving && (
+          <span className="inline-block bg-yellow-100 border-2 border-yellow-400 text-yellow-800 px-4 py-2 rounded-lg text-sm font-semibold animate-pulse">
+            💾 Saving draft...
+          </span>
+        )}
+        {!isSaving && lastSaved && (
+          <span className="inline-block bg-green-100 border-2 border-green-400 text-green-800 px-4 py-2 rounded-lg text-sm font-semibold">
+            ✓ Saved at {lastSaved.toLocaleTimeString()}
+          </span>
+        )}
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Personal Information */}
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Personal Information</CardTitle>
+              <Button 
+                type="button" 
+                onClick={handleFillExample} 
+                variant="ghost" 
+                size="sm"
+                className="text-sm hover:bg-yellow-50"
+                title="Fill all fields with example data"
+              >
+                ✨ Fill with Example
+              </Button>
             </div>
-
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email <span className="text-red-500">*</span>
-                </label>
-                <input 
-                  type="email" 
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="john@example.com"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number <span className="text-red-500">*</span>
-                </label>
-                <input 
-                  type="tel" 
-                  required
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="+62 812-3456-7890"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Location
-                </label>
-                <input 
-                  type="text" 
-                  value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Jakarta, Indonesia"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Website/Portfolio
-                </label>
-                <input 
-                  type="url" 
-                  value={formData.website}
-                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://yourwebsite.com"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  LinkedIn
-                </label>
-                <input 
-                  type="url" 
-                  value={formData.linkedin}
-                  onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://linkedin.com/in/johndoe"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  GitHub
-                </label>
-                <input 
-                  type="url" 
-                  value={formData.github}
-                  onChange={(e) => setFormData({ ...formData, github: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://github.com/johndoe"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Profile Summary */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-800 border-b pb-2">Profile Summary</h3>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Professional Summary <span className="text-red-500">*</span>
-              </label>
-              <textarea 
-                rows={4}
+              <Input
+                label="Full Name"
+                type="text"
                 required
-                value={formData.summary}
-                onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Brief description about yourself and your professional experience..."
+                value={formData.fullName}
+                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                placeholder="John Doe"
+              />
+              <Input
+                label="Professional Title"
+                type="text"
+                required
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder="Software Engineer"
               />
             </div>
-          </div>
 
-          {/* Education */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center border-b pb-2">
-              <h3 className="text-xl font-semibold text-gray-800">Education</h3>
-              <button 
-                type="button"
-                onClick={addEducation}
-                className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg"
-              >
-                + Add Education
-              </button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="Email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="john@example.com"
+              />
+              <Input
+                label="Phone Number"
+                type="tel"
+                required
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                placeholder="+62 812-3456-7890"
+              />
             </div>
-            
-            {formData.education.map((edu, index) => (
-              <div key={index} className="p-4 border border-gray-200 rounded-lg space-y-3 relative">
-                {formData.education.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeEducation(index)}
-                    className="absolute top-2 right-2 text-red-500 hover:text-red-700"
-                  >
-                    ✕
-                  </button>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="Location"
+                type="text"
+                value={formData.location}
+                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                placeholder="Jakarta, Indonesia"
+              />
+              <Input
+                label="Website"
+                type="url"
+                value={formData.website}
+                onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                placeholder="https://yourwebsite.com"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Input
+                label="LinkedIn"
+                type="url"
+                value={formData.linkedin}
+                onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+                placeholder="https://linkedin.com/in/yourprofile"
+              />
+              <Input
+                label="GitHub"
+                type="url"
+                value={formData.github}
+                onChange={(e) => setFormData({ ...formData, github: e.target.value })}
+                placeholder="https://github.com/yourusername"
+              />
+            </div>
+
+            {/* Photo Upload */}
+            <div className="space-y-3">
+              <Label>Profile Photo (Optional)</Label>
+              <div className="flex items-start gap-4">
+                {formData.photo ? (
+                  <div className="relative">
+                    <img 
+                      src={formData.photo} 
+                      alt="Profile" 
+                      className="w-32 h-32 object-cover rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemovePhoto}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                    <span className="text-gray-400 text-4xl">📷</span>
+                  </div>
                 )}
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">School/University</label>
-                    <input 
-                      type="text"
-                      value={edu.school}
-                      onChange={(e) => {
-                        const newEducation = [...formData.education];
-                        newEducation[index].school = e.target.value;
-                        setFormData({ ...formData, education: newEducation });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="University Name"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Degree</label>
-                    <input 
-                      type="text"
-                      value={edu.degree}
-                      onChange={(e) => {
-                        const newEducation = [...formData.education];
-                        newEducation[index].degree = e.target.value;
-                        setFormData({ ...formData, education: newEducation });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Bachelor's Degree"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Field of Study</label>
-                  <input 
-                    type="text"
-                    value={edu.field}
-                    onChange={(e) => {
-                      const newEducation = [...formData.education];
-                      newEducation[index].field = e.target.value;
-                      setFormData({ ...formData, education: newEducation });
-                    }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Computer Science"
+                <div className="flex-1">
+                  <input
+                    type="file"
+                    id="photo-upload"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
                   />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                    <input 
-                      type="month"
-                      value={edu.startDate}
-                      onChange={(e) => {
-                        const newEducation = [...formData.education];
-                        newEducation[index].startDate = e.target.value;
-                        setFormData({ ...formData, education: newEducation });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
-                    <input 
-                      type="month"
-                      value={edu.endDate}
-                      onChange={(e) => {
-                        const newEducation = [...formData.education];
-                        newEducation[index].endDate = e.target.value;
-                        setFormData({ ...formData, education: newEducation });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                  <textarea 
-                    rows={2}
-                    value={edu.description}
-                    onChange={(e) => {
-                      const newEducation = [...formData.education];
-                      newEducation[index].description = e.target.value;
-                      setFormData({ ...formData, education: newEducation });
-                    }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Achievements, GPA, relevant coursework..."
-                  />
+                  <label
+                    htmlFor="photo-upload"
+                    className="inline-block px-4 py-2 bg-white border-2 border-black rounded-lg font-semibold cursor-pointer hover:bg-gray-50 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all"
+                  >
+                    {formData.photo ? "Change Photo" : "Upload Photo"}
+                  </label>
+                  <p className="text-xs text-gray-600 mt-2">
+                    Max size: 2MB • Formats: JPG, PNG, GIF
+                  </p>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* Experience */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center border-b pb-2">
-              <h3 className="text-xl font-semibold text-gray-800">Work Experience</h3>
-              <button 
-                type="button"
-                onClick={addExperience}
-                className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg"
-              >
-                + Add Experience
-              </button>
             </div>
-            
+
+            {/* Template Selection */}
+            <div className="space-y-3">
+              <Label>Choose CV Template</Label>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                {templates.map((template) => (
+                  <button
+                    key={template.id}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, template: template.id })}
+                    className={`p-4 rounded-lg border-2 text-left transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${
+                      formData.template === template.id
+                        ? "border-black bg-yellow-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                        : "border-gray-300 bg-white hover:border-black"
+                    }`}
+                  >
+                    <div className="text-lg font-bold mb-1">{template.preview}</div>
+                    <div className="text-sm font-semibold mb-1">{template.name}</div>
+                    <div className="text-xs text-gray-600">{template.description}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <Textarea
+              label="Profile Summary"
+              value={formData.summary}
+              onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
+              placeholder="Brief description about yourself and your professional background..."
+              rows={4}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Work Experience */}
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Work Experience</CardTitle>
+              <Button type="button" onClick={addExperience} variant="outline" size="sm">
+                + Add Experience
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
             {formData.experience.map((exp, index) => (
-              <div key={index} className="p-4 border border-gray-200 rounded-lg space-y-3 relative">
+              <div key={index} className="border-2 border-gray-200 rounded-lg p-4 space-y-4 relative">
                 {formData.experience.length > 1 && (
                   <button
                     type="button"
                     onClick={() => removeExperience(index)}
-                    className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+                    className="absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold"
                   >
                     ✕
                   </button>
                 )}
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
-                    <input 
-                      type="text"
-                      value={exp.company}
-                      onChange={(e) => {
-                        const newExperience = [...formData.experience];
-                        newExperience[index].company = e.target.value;
-                        setFormData({ ...formData, experience: newExperience });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Company Name"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Position</label>
-                    <input 
-                      type="text"
-                      value={exp.position}
-                      onChange={(e) => {
-                        const newExperience = [...formData.experience];
-                        newExperience[index].position = e.target.value;
-                        setFormData({ ...formData, experience: newExperience });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Software Engineer"
-                    />
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input
+                    label="Company"
+                    type="text"
+                    value={exp.company}
+                    onChange={(e) => {
+                      const newExp = [...formData.experience];
+                      newExp[index].company = e.target.value;
+                      setFormData({ ...formData, experience: newExp });
+                    }}
+                    placeholder="Company Name"
+                  />
+                  <Input
+                    label="Position"
+                    type="text"
+                    value={exp.position}
+                    onChange={(e) => {
+                      const newExp = [...formData.experience];
+                      newExp[index].position = e.target.value;
+                      setFormData({ ...formData, experience: newExp });
+                    }}
+                    placeholder="Job Title"
+                  />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                  <input 
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Input
+                    label="Location"
                     type="text"
                     value={exp.location}
                     onChange={(e) => {
-                      const newExperience = [...formData.experience];
-                      newExperience[index].location = e.target.value;
-                      setFormData({ ...formData, experience: newExperience });
+                      const newExp = [...formData.experience];
+                      newExp[index].location = e.target.value;
+                      setFormData({ ...formData, experience: newExp });
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Jakarta, Indonesia"
+                    placeholder="City, Country"
                   />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
-                    <input 
-                      type="month"
-                      value={exp.startDate}
-                      onChange={(e) => {
-                        const newExperience = [...formData.experience];
-                        newExperience[index].startDate = e.target.value;
-                        setFormData({ ...formData, experience: newExperience });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
-                    <input 
-                      type="month"
-                      value={exp.endDate}
-                      onChange={(e) => {
-                        const newExperience = [...formData.experience];
-                        newExperience[index].endDate = e.target.value;
-                        setFormData({ ...formData, experience: newExperience });
-                      }}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Leave empty if current"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                  <textarea 
-                    rows={3}
-                    value={exp.description}
+                  <Input
+                    label="Start Date"
+                    type="month"
+                    value={exp.startDate}
                     onChange={(e) => {
-                      const newExperience = [...formData.experience];
-                      newExperience[index].description = e.target.value;
-                      setFormData({ ...formData, experience: newExperience });
+                      const newExp = [...formData.experience];
+                      newExp[index].startDate = e.target.value;
+                      setFormData({ ...formData, experience: newExp });
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Describe your responsibilities and achievements..."
+                  />
+                  <Input
+                    label="End Date"
+                    type="month"
+                    value={exp.endDate}
+                    onChange={(e) => {
+                      const newExp = [...formData.experience];
+                      newExp[index].endDate = e.target.value;
+                      setFormData({ ...formData, experience: newExp });
+                    }}
                   />
                 </div>
+
+                <Textarea
+                  label="Description"
+                  value={exp.description}
+                  onChange={(e) => {
+                    const newExp = [...formData.experience];
+                    newExp[index].description = e.target.value;
+                    setFormData({ ...formData, experience: newExp });
+                  }}
+                  placeholder="Describe your responsibilities and achievements..."
+                  rows={3}
+                />
               </div>
             ))}
-          </div>
+          </CardContent>
+        </Card>
 
-          {/* Skills */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center border-b pb-2">
-              <h3 className="text-xl font-semibold text-gray-800">Skills</h3>
-              <button 
-                type="button"
-                onClick={addSkill}
-                className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg"
-              >
-                + Add Skill
-              </button>
+        {/* Education */}
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Education</CardTitle>
+              <Button type="button" onClick={addEducation} variant="outline" size="sm">
+                + Add Education
+              </Button>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {formData.education.map((edu, index) => (
+              <div key={index} className="border-2 border-gray-200 rounded-lg p-4 space-y-4 relative">
+                {formData.education.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeEducation(index)}
+                    className="absolute top-2 right-2 text-red-500 hover:text-red-700 font-bold"
+                  >
+                    ✕
+                  </button>
+                )}
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Input
+                    label="School/University"
+                    type="text"
+                    value={edu.school}
+                    onChange={(e) => {
+                      const newEdu = [...formData.education];
+                      newEdu[index].school = e.target.value;
+                      setFormData({ ...formData, education: newEdu });
+                    }}
+                    placeholder="University Name"
+                  />
+                  <Input
+                    label="Degree"
+                    type="text"
+                    value={edu.degree}
+                    onChange={(e) => {
+                      const newEdu = [...formData.education];
+                      newEdu[index].degree = e.target.value;
+                      setFormData({ ...formData, education: newEdu });
+                    }}
+                    placeholder="Bachelor of Science"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Input
+                    label="Field of Study"
+                    type="text"
+                    value={edu.field}
+                    onChange={(e) => {
+                      const newEdu = [...formData.education];
+                      newEdu[index].field = e.target.value;
+                      setFormData({ ...formData, education: newEdu });
+                    }}
+                    placeholder="Computer Science"
+                  />
+                  <Input
+                    label="Start Date"
+                    type="month"
+                    value={edu.startDate}
+                    onChange={(e) => {
+                      const newEdu = [...formData.education];
+                      newEdu[index].startDate = e.target.value;
+                      setFormData({ ...formData, education: newEdu });
+                    }}
+                  />
+                  <Input
+                    label="End Date"
+                    type="month"
+                    value={edu.endDate}
+                    onChange={(e) => {
+                      const newEdu = [...formData.education];
+                      newEdu[index].endDate = e.target.value;
+                      setFormData({ ...formData, education: newEdu });
+                    }}
+                  />
+                </div>
+
+                <Textarea
+                  label="Description"
+                  value={edu.description}
+                  onChange={(e) => {
+                    const newEdu = [...formData.education];
+                    newEdu[index].description = e.target.value;
+                    setFormData({ ...formData, education: newEdu });
+                  }}
+                  placeholder="Notable achievements, activities, or relevant coursework..."
+                  rows={3}
+                />
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* Skills */}
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Skills</CardTitle>
+              <Button type="button" onClick={addSkill} variant="outline" size="sm">
+                + Add Skill
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {formData.skills.map((skill, index) => (
                 <div key={index} className="flex gap-2">
-                  <input 
+                  <Input
                     type="text"
                     value={skill}
                     onChange={(e) => {
@@ -533,14 +580,13 @@ export default function CVForm({ onBack, onSubmit }: CVFormProps) {
                       newSkills[index] = e.target.value;
                       setFormData({ ...formData, skills: newSkills });
                     }}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., JavaScript, React, Node.js"
+                    placeholder="e.g., JavaScript"
                   />
                   {formData.skills.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeSkill(index)}
-                      className="text-red-500 hover:text-red-700 px-2"
+                      className="text-red-500 hover:text-red-700 font-bold px-2"
                     >
                       ✕
                     </button>
@@ -548,81 +594,76 @@ export default function CVForm({ onBack, onSubmit }: CVFormProps) {
                 </div>
               ))}
             </div>
-          </div>
+          </CardContent>
+        </Card>
 
-          {/* Languages */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center border-b pb-2">
-              <h3 className="text-xl font-semibold text-gray-800">Languages</h3>
-              <button 
-                type="button"
-                onClick={addLanguage}
-                className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-lg"
-              >
+        {/* Languages */}
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Languages</CardTitle>
+              <Button type="button" onClick={addLanguage} variant="outline" size="sm">
                 + Add Language
-              </button>
+              </Button>
             </div>
-            
-            {formData.languages.map((lang, index) => (
-              <div key={index} className="flex gap-3">
-                <input 
-                  type="text"
-                  value={lang.name}
-                  onChange={(e) => {
-                    const newLanguages = [...formData.languages];
-                    newLanguages[index].name = e.target.value;
-                    setFormData({ ...formData, languages: newLanguages });
-                  }}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Language name"
-                />
-                <select
-                  value={lang.level}
-                  onChange={(e) => {
-                    const newLanguages = [...formData.languages];
-                    newLanguages[index].level = e.target.value;
-                    setFormData({ ...formData, languages: newLanguages });
-                  }}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="">Select Level</option>
-                  <option value="Native">Native</option>
-                  <option value="Fluent">Fluent</option>
-                  <option value="Advanced">Advanced</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Basic">Basic</option>
-                </select>
-                {formData.languages.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeLanguage(index)}
-                    className="text-red-500 hover:text-red-700 px-2"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {formData.languages.map((lang, index) => (
+                <div key={index} className="flex gap-4 items-end">
+                  <div className="flex-1">
+                    <Input
+                      label="Language"
+                      type="text"
+                      value={lang.name}
+                      onChange={(e) => {
+                        const newLangs = [...formData.languages];
+                        newLangs[index].name = e.target.value;
+                        setFormData({ ...formData, languages: newLangs });
+                      }}
+                      placeholder="e.g., English"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      label="Level"
+                      type="text"
+                      value={lang.level}
+                      onChange={(e) => {
+                        const newLangs = [...formData.languages];
+                        newLangs[index].level = e.target.value;
+                        setFormData({ ...formData, languages: newLangs });
+                      }}
+                      placeholder="e.g., Native, Fluent, Intermediate"
+                    />
+                  </div>
+                  {formData.languages.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeLanguage(index)}
+                      className="text-red-500 hover:text-red-700 font-bold px-2 pb-2"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Submit Buttons */}
-          <div className="flex gap-3 pt-4 border-t">
-            <button 
-              type="submit"
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
-            >
-              Generate CV
-            </button>
-            <button 
-              type="button"
-              onClick={onBack}
-              className="px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+        {/* Action Buttons */}
+        <Card>
+          <CardContent className="flex justify-between pt-5">
+            <Button type="button" onClick={onBack} variant="outline">
+              ← Back
+            </Button>
+            <Button type="submit">
+              Preview CV →
+            </Button>
+          </CardContent>
+        </Card>
+      </form>
     </div>
   );
 }
