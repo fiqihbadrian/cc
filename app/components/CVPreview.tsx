@@ -72,22 +72,22 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
   // Modern Template (Neobrutalism)
   const renderModernTemplate = () => (
-    <div className="bg-white p-8 md:p-12 shadow-lg rounded-lg cv-preview" id="cv-content">
+    <div className="bg-white p-6 md:p-8 shadow-lg rounded-lg cv-preview print:shadow-none print:rounded-none" id="cv-content">
       {/* Header Section */}
-      <div className="mb-8 pb-6 border-b-4 border-gray-900">
-        <div className="flex gap-6 items-start mb-4">
+      <div className="mb-4 pb-3 border-b-4 border-gray-900">
+        <div className="flex gap-4 items-start mb-3">
           {data.photo && (
             <img 
               src={data.photo} 
               alt={data.fullName}
-              className="w-32 h-32 object-cover rounded-lg border-4 border-gray-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex-shrink-0"
+              className="w-24 h-24 object-cover rounded-lg border-4 border-gray-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex-shrink-0"
             />
           )}
           <div className="flex-1">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2 uppercase tracking-tight">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-1 uppercase tracking-tight">
               {data.fullName}
             </h1>
-            <p className="text-xl md:text-2xl text-gray-700 mb-4">{data.title}</p>
+            <p className="text-lg md:text-xl text-gray-700 mb-2">{data.title}</p>
           </div>
         </div>
         
@@ -139,36 +139,36 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Profile Summary */}
       {data.summary && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-800 uppercase tracking-wide">
+        <div className="mb-4">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 pb-1 border-b-2 border-gray-800 uppercase tracking-wide">
             Profile Summary
           </h2>
-          <p className="text-gray-700 leading-relaxed text-justify">{data.summary}</p>
+          <p className="text-gray-700 leading-relaxed text-justify text-sm">{data.summary}</p>
         </div>
       )}
 
       {/* Work Experience */}
       {data.experience.some(exp => exp.company || exp.position) && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-800 uppercase tracking-wide">
+        <div className="mb-4">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 pb-1 border-b-2 border-gray-800 uppercase tracking-wide">
             Work Experience
           </h2>
-          <div className="space-y-5">
+          <div className="space-y-3">
             {data.experience.map((exp, index) => (
               (exp.company || exp.position) && (
-                <div key={index} className="border-l-4 border-gray-800 pl-4">
-                  <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
+                <div key={index} className="border-l-4 border-gray-800 pl-3">
+                  <div className="flex justify-between items-start mb-1 flex-wrap gap-2">
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900">{exp.position}</h3>
-                      <p className="text-gray-700 font-semibold">{exp.company}</p>
+                      <h3 className="text-base font-bold text-gray-900">{exp.position}</h3>
+                      <p className="text-sm text-gray-700 font-semibold">{exp.company}</p>
                     </div>
-                    <div className="text-right text-sm text-gray-600">
+                    <div className="text-right text-xs text-gray-600">
                       <p className="font-medium">{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
                       {exp.location && <p className="text-gray-500">{exp.location}</p>}
                     </div>
                   </div>
                   {exp.description && (
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
                       {exp.description}
                     </p>
                   )}
@@ -181,26 +181,26 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Education */}
       {data.education.some(edu => edu.school || edu.degree) && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-800 uppercase tracking-wide">
+        <div className="mb-4">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 pb-1 border-b-2 border-gray-800 uppercase tracking-wide">
             Education
           </h2>
-          <div className="space-y-5">
+          <div className="space-y-3">
             {data.education.map((edu, index) => (
               (edu.school || edu.degree) && (
-                <div key={index} className="border-l-4 border-gray-800 pl-4">
-                  <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
+                <div key={index} className="border-l-4 border-gray-800 pl-3">
+                  <div className="flex justify-between items-start mb-1 flex-wrap gap-2">
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900">{edu.degree}</h3>
-                      <p className="text-gray-700 font-semibold">{edu.school}</p>
-                      {edu.field && <p className="text-gray-600 italic">{edu.field}</p>}
+                      <h3 className="text-base font-bold text-gray-900">{edu.degree}</h3>
+                      <p className="text-sm text-gray-700 font-semibold">{edu.school}</p>
+                      {edu.field && <p className="text-sm text-gray-600 italic">{edu.field}</p>}
                     </div>
-                    <div className="text-right text-sm text-gray-600 font-medium">
+                    <div className="text-right text-xs text-gray-600 font-medium">
                       <p>{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
                     </div>
                   </div>
                   {edu.description && (
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
                       {edu.description}
                     </p>
                   )}
@@ -213,8 +213,8 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Skills */}
       {data.skills.some(skill => skill.trim()) && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-800 uppercase tracking-wide">
+        <div className="mb-4">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 pb-1 border-b-2 border-gray-800 uppercase tracking-wide">
             Skills
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -234,17 +234,17 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Languages */}
       {data.languages.some(lang => lang.name) && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-800 uppercase tracking-wide">
+        <div className="mb-4">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 pb-1 border-b-2 border-gray-800 uppercase tracking-wide">
             Languages
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {data.languages
               .filter(lang => lang.name)
               .map((lang, index) => (
-                <div key={index} className="border-2 border-gray-800 rounded-lg p-3 bg-gray-50">
-                  <p className="text-gray-900 font-bold">{lang.name}</p>
-                  <p className="text-gray-600 text-sm">{lang.level}</p>
+                <div key={index} className="border-2 border-gray-800 rounded-lg p-2 bg-gray-50">
+                  <p className="text-sm text-gray-900 font-bold">{lang.name}</p>
+                  <p className="text-gray-600 text-xs">{lang.level}</p>
                 </div>
               ))}
           </div>
@@ -255,20 +255,20 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
   // Classic Template (Traditional with serif fonts)
   const renderClassicTemplate = () => (
-    <div className="bg-white p-8 md:p-12 shadow-lg rounded-lg cv-preview font-serif" id="cv-content">
+    <div className="bg-white p-6 md:p-8 shadow-lg rounded-lg cv-preview font-serif print:shadow-none print:rounded-none" id="cv-content">
       {/* Header Section */}
-      <div className="mb-8 pb-4 border-b-2 border-blue-800 text-center">
+      <div className="mb-4 pb-3 border-b-2 border-blue-800 text-center">
         {data.photo && (
           <img 
             src={data.photo} 
             alt={data.fullName}
-            className="w-32 h-32 object-cover rounded-full border-4 border-blue-800 mx-auto mb-4"
+            className="w-24 h-24 object-cover rounded-full border-4 border-blue-800 mx-auto mb-3"
           />
         )}
-        <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold text-blue-900 mb-1">
           {data.fullName}
         </h1>
-        <p className="text-xl md:text-2xl text-blue-700 mb-4 italic">{data.title}</p>
+        <p className="text-lg md:text-xl text-blue-700 mb-3 italic">{data.title}</p>
         
         <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-700">
           {data.email && <span>✉️ {data.email}</span>}
@@ -294,36 +294,36 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Profile Summary */}
       {data.summary && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-blue-900 mb-3 border-b border-blue-300 pb-1">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-blue-900 mb-2 border-b border-blue-300 pb-1">
             Professional Summary
           </h2>
-          <p className="text-gray-800 leading-relaxed text-justify">{data.summary}</p>
+          <p className="text-sm text-gray-800 leading-relaxed text-justify">{data.summary}</p>
         </div>
       )}
 
       {/* Work Experience */}
       {data.experience.some(exp => exp.company || exp.position) && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-blue-900 mb-3 border-b border-blue-300 pb-1">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-blue-900 mb-2 border-b border-blue-300 pb-1">
             Professional Experience
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {data.experience.map((exp, index) => (
               (exp.company || exp.position) && (
                 <div key={index}>
                   <div className="flex justify-between items-start mb-1">
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900">{exp.position}</h3>
-                      <p className="text-gray-700 italic">{exp.company}</p>
+                      <h3 className="text-base font-bold text-gray-900">{exp.position}</h3>
+                      <p className="text-sm text-gray-700 italic">{exp.company}</p>
                     </div>
-                    <div className="text-right text-sm text-gray-600">
+                    <div className="text-right text-xs text-gray-600">
                       <p>{formatDate(exp.startDate)} - {formatDate(exp.endDate)}</p>
                       {exp.location && <p>{exp.location}</p>}
                     </div>
                   </div>
                   {exp.description && (
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line ml-4">
+                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line ml-3">
                       {exp.description}
                     </p>
                   )}
@@ -336,26 +336,26 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Education */}
       {data.education.some(edu => edu.school || edu.degree) && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-blue-900 mb-3 border-b border-blue-300 pb-1">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-blue-900 mb-2 border-b border-blue-300 pb-1">
             Education
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {data.education.map((edu, index) => (
               (edu.school || edu.degree) && (
                 <div key={index}>
                   <div className="flex justify-between items-start mb-1">
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900">{edu.degree}</h3>
-                      <p className="text-gray-700 italic">{edu.school}</p>
-                      {edu.field && <p className="text-gray-600">{edu.field}</p>}
+                      <h3 className="text-base font-bold text-gray-900">{edu.degree}</h3>
+                      <p className="text-sm text-gray-700 italic">{edu.school}</p>
+                      {edu.field && <p className="text-sm text-gray-600">{edu.field}</p>}
                     </div>
-                    <div className="text-right text-sm text-gray-600">
+                    <div className="text-right text-xs text-gray-600">
                       <p>{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
                     </div>
                   </div>
                   {edu.description && (
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line ml-4">
+                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line ml-3">
                       {edu.description}
                     </p>
                   )}
@@ -368,8 +368,8 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Skills */}
       {data.skills.some(skill => skill.trim()) && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-blue-900 mb-3 border-b border-blue-300 pb-1">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-blue-900 mb-2 border-b border-blue-300 pb-1">
             Skills
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -386,8 +386,8 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Languages */}
       {data.languages.some(lang => lang.name) && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-blue-900 mb-3 border-b border-blue-300 pb-1">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-blue-900 mb-2 border-b border-blue-300 pb-1">
             Languages
           </h2>
           <div className="space-y-1">
@@ -395,8 +395,8 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
               .filter(lang => lang.name)
               .map((lang, index) => (
                 <div key={index}>
-                  <span className="font-semibold text-gray-900">{lang.name}</span>
-                  <span className="text-gray-600"> - {lang.level}</span>
+                  <span className="font-semibold text-sm text-gray-900">{lang.name}</span>
+                  <span className="text-sm text-gray-600"> - {lang.level}</span>
                 </div>
               ))}
           </div>
@@ -407,20 +407,20 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
   // Minimal Template (Clean and spacious)
   const renderMinimalTemplate = () => (
-    <div className="bg-white p-8 md:p-12 shadow-lg rounded-lg cv-preview" id="cv-content">
+    <div className="bg-white p-6 md:p-8 shadow-lg rounded-lg cv-preview print:shadow-none print:rounded-none" id="cv-content">
       {/* Header Section */}
-      <div className="mb-12 text-center">
+      <div className="mb-6 text-center">
         {data.photo && (
           <img 
             src={data.photo} 
             alt={data.fullName}
-            className="w-32 h-32 object-cover rounded-full mx-auto mb-6 border border-gray-200"
+            className="w-24 h-24 object-cover rounded-full mx-auto mb-4 border border-gray-200"
           />
         )}
-        <h1 className="text-5xl md:text-6xl font-light text-gray-900 mb-3 tracking-wide">
+        <h1 className="text-4xl md:text-5xl font-light text-gray-900 mb-2 tracking-wide">
           {data.fullName}
         </h1>
-        <p className="text-xl text-gray-600 mb-6 font-light">{data.title}</p>
+        <p className="text-lg text-gray-600 mb-4 font-light">{data.title}</p>
         
         <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600">
           {data.email && <span>{data.email}</span>}
@@ -436,8 +436,8 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Profile Summary */}
       {data.summary && (
-        <div className="mb-12">
-          <p className="text-gray-700 leading-relaxed text-center max-w-3xl mx-auto font-light">
+        <div className="mb-6">
+          <p className="text-sm text-gray-700 leading-relaxed text-center max-w-3xl mx-auto font-light">
             {data.summary}
           </p>
         </div>
@@ -445,22 +445,22 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Work Experience */}
       {data.experience.some(exp => exp.company || exp.position) && (
-        <div className="mb-12">
-          <h2 className="text-sm font-semibold text-gray-500 mb-6 tracking-widest uppercase text-center">
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-500 mb-4 tracking-widest uppercase text-center">
             Experience
           </h2>
-          <div className="space-y-8">
+          <div className="space-y-4">
             {data.experience.map((exp, index) => (
               (exp.company || exp.position) && (
                 <div key={index} className="text-center">
-                  <h3 className="text-xl font-medium text-gray-900 mb-1">{exp.position}</h3>
-                  <p className="text-gray-600 mb-2">{exp.company}</p>
-                  <p className="text-sm text-gray-500 mb-3">
+                  <h3 className="text-lg font-medium text-gray-900 mb-1">{exp.position}</h3>
+                  <p className="text-sm text-gray-600 mb-1">{exp.company}</p>
+                  <p className="text-xs text-gray-500 mb-2">
                     {formatDate(exp.startDate)} - {formatDate(exp.endDate)}
                     {exp.location && ` • ${exp.location}`}
                   </p>
                   {exp.description && (
-                    <p className="text-gray-700 leading-relaxed max-w-2xl mx-auto font-light">
+                    <p className="text-sm text-gray-700 leading-relaxed max-w-2xl mx-auto font-light">
                       {exp.description}
                     </p>
                   )}
@@ -473,22 +473,22 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Education */}
       {data.education.some(edu => edu.school || edu.degree) && (
-        <div className="mb-12">
-          <h2 className="text-sm font-semibold text-gray-500 mb-6 tracking-widest uppercase text-center">
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-500 mb-4 tracking-widest uppercase text-center">
             Education
           </h2>
-          <div className="space-y-6">
+          <div className="space-y-4">
             {data.education.map((edu, index) => (
               (edu.school || edu.degree) && (
                 <div key={index} className="text-center">
-                  <h3 className="text-xl font-medium text-gray-900 mb-1">{edu.degree}</h3>
-                  <p className="text-gray-600 mb-2">{edu.school}</p>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="text-lg font-medium text-gray-900 mb-1">{edu.degree}</h3>
+                  <p className="text-sm text-gray-600 mb-1">{edu.school}</p>
+                  <p className="text-xs text-gray-500">
                     {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
                     {edu.field && ` • ${edu.field}`}
                   </p>
                   {edu.description && (
-                    <p className="text-gray-700 leading-relaxed max-w-2xl mx-auto font-light mt-2">
+                    <p className="text-sm text-gray-700 leading-relaxed max-w-2xl mx-auto font-light mt-2">
                       {edu.description}
                     </p>
                   )}
@@ -501,8 +501,8 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Skills */}
       {data.skills.some(skill => skill.trim()) && (
-        <div className="mb-12">
-          <h2 className="text-sm font-semibold text-gray-500 mb-6 tracking-widest uppercase text-center">
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-500 mb-4 tracking-widest uppercase text-center">
             Skills
           </h2>
           <div className="flex flex-wrap justify-center gap-3">
@@ -522,8 +522,8 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Languages */}
       {data.languages.some(lang => lang.name) && (
-        <div className="mb-12">
-          <h2 className="text-sm font-semibold text-gray-500 mb-6 tracking-widest uppercase text-center">
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-500 mb-4 tracking-widest uppercase text-center">
             Languages
           </h2>
           <div className="flex flex-wrap justify-center gap-6 text-center">
@@ -543,22 +543,22 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
   // Professional Template (Corporate style)
   const renderProfessionalTemplate = () => (
-    <div className="bg-white shadow-lg rounded-lg cv-preview" id="cv-content">
+    <div className="bg-white shadow-lg rounded-lg cv-preview print:shadow-none print:rounded-none" id="cv-content">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-8 md:p-10 rounded-t-lg">
-        <div className="flex gap-6 items-center">
+      <div className="bg-gradient-to-r from-blue-900 to-blue-700 text-white p-6 md:p-8 rounded-t-lg print:rounded-none">
+        <div className="flex gap-4 items-center">
           {data.photo && (
             <img 
               src={data.photo} 
               alt={data.fullName}
-              className="w-32 h-32 object-cover rounded-lg border-4 border-white flex-shrink-0"
+              className="w-24 h-24 object-cover rounded-lg border-4 border-white flex-shrink-0"
             />
           )}
           <div className="flex-1">
-            <h1 className="text-4xl md:text-5xl font-bold mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold mb-1">
               {data.fullName}
             </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-4">{data.title}</p>
+            <p className="text-lg md:text-xl text-blue-100 mb-2">{data.title}</p>
           </div>
         </div>
         
@@ -584,33 +584,33 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
         </div>
       </div>
 
-      <div className="p-8 md:p-10">
+      <div className="p-6 md:p-8">
         {/* Profile Summary */}
         {data.summary && (
-          <div className="mb-8 bg-blue-50 p-5 rounded-lg border-l-4 border-blue-700">
-            <h2 className="text-xl font-bold text-blue-900 mb-3">
+          <div className="mb-4 bg-blue-50 p-4 rounded-lg border-l-4 border-blue-700">
+            <h2 className="text-lg font-bold text-blue-900 mb-2">
               Professional Summary
             </h2>
-            <p className="text-gray-700 leading-relaxed">{data.summary}</p>
+            <p className="text-sm text-gray-700 leading-relaxed">{data.summary}</p>
           </div>
         )}
 
         {/* Work Experience */}
         {data.experience.some(exp => exp.company || exp.position) && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4 pb-2 border-b-2 border-blue-700">
+          <div className="mb-4">
+            <h2 className="text-lg font-bold text-blue-900 mb-2 pb-1 border-b-2 border-blue-700">
               Professional Experience
             </h2>
-            <div className="space-y-6">
+            <div className="space-y-3">
               {data.experience.map((exp, index) => (
                 (exp.company || exp.position) && (
-                  <div key={index} className="pl-4 border-l-2 border-blue-300">
-                    <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
+                  <div key={index} className="pl-3 border-l-2 border-blue-300">
+                    <div className="flex justify-between items-start mb-1 flex-wrap gap-2">
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900">{exp.position}</h3>
-                        <p className="text-blue-700 font-semibold">{exp.company}</p>
+                        <h3 className="text-base font-bold text-gray-900">{exp.position}</h3>
+                        <p className="text-sm text-blue-700 font-semibold">{exp.company}</p>
                       </div>
-                      <div className="text-right text-sm">
+                      <div className="text-right text-xs">
                         <p className="text-gray-700 font-medium">
                           {formatDate(exp.startDate)} - {formatDate(exp.endDate)}
                         </p>
@@ -618,7 +618,7 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
                       </div>
                     </div>
                     {exp.description && (
-                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
                         {exp.description}
                       </p>
                     )}
@@ -631,26 +631,26 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
         {/* Education */}
         {data.education.some(edu => edu.school || edu.degree) && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4 pb-2 border-b-2 border-blue-700">
+          <div className="mb-4">
+            <h2 className="text-lg font-bold text-blue-900 mb-2 pb-1 border-b-2 border-blue-700">
               Education
             </h2>
-            <div className="space-y-6">
+            <div className="space-y-3">
               {data.education.map((edu, index) => (
                 (edu.school || edu.degree) && (
-                  <div key={index} className="pl-4 border-l-2 border-blue-300">
-                    <div className="flex justify-between items-start mb-2 flex-wrap gap-2">
+                  <div key={index} className="pl-3 border-l-2 border-blue-300">
+                    <div className="flex justify-between items-start mb-1 flex-wrap gap-2">
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900">{edu.degree}</h3>
-                        <p className="text-blue-700 font-semibold">{edu.school}</p>
-                        {edu.field && <p className="text-gray-600 italic">{edu.field}</p>}
+                        <h3 className="text-base font-bold text-gray-900">{edu.degree}</h3>
+                        <p className="text-sm text-blue-700 font-semibold">{edu.school}</p>
+                        {edu.field && <p className="text-sm text-gray-600 italic">{edu.field}</p>}
                       </div>
-                      <div className="text-right text-sm text-gray-700 font-medium">
+                      <div className="text-right text-xs text-gray-700 font-medium">
                         <p>{formatDate(edu.startDate)} - {formatDate(edu.endDate)}</p>
                       </div>
                     </div>
                     {edu.description && (
-                      <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
                         {edu.description}
                       </p>
                     )}
@@ -663,8 +663,8 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
         {/* Skills */}
         {data.skills.some(skill => skill.trim()) && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4 pb-2 border-b-2 border-blue-700">
+          <div className="mb-4">
+            <h2 className="text-lg font-bold text-blue-900 mb-2 pb-1 border-b-2 border-blue-700">
               Core Competencies
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -684,17 +684,17 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
         {/* Languages */}
         {data.languages.some(lang => lang.name) && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4 pb-2 border-b-2 border-blue-700">
+          <div className="mb-4">
+            <h2 className="text-lg font-bold text-blue-900 mb-2 pb-1 border-b-2 border-blue-700">
               Languages
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {data.languages
                 .filter(lang => lang.name)
                 .map((lang, index) => (
-                  <div key={index} className="bg-blue-50 p-3 rounded border border-blue-200">
-                    <p className="text-gray-900 font-bold">{lang.name}</p>
-                    <p className="text-gray-600 text-sm">{lang.level}</p>
+                  <div key={index} className="bg-blue-50 p-2 rounded border border-blue-200">
+                    <p className="text-sm text-gray-900 font-bold">{lang.name}</p>
+                    <p className="text-gray-600 text-xs">{lang.level}</p>
                   </div>
                 ))}
             </div>
@@ -706,26 +706,26 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
   // ATS-Friendly Template (Simple, parsable format)
   const renderATSTemplate = () => (
-    <div className="bg-white p-8 md:p-12 shadow-lg rounded-lg cv-preview" id="cv-content">
+    <div className="bg-white p-6 md:p-8 shadow-lg rounded-lg cv-preview print:shadow-none print:rounded-none" id="cv-content">
       {/* Header Section - Simple and clear */}
-      <div className="mb-6 pb-4 border-b border-gray-400">
-        <div className="flex gap-6 items-start">
+      <div className="mb-4 pb-3 border-b border-gray-400">
+        <div className="flex gap-4 items-start">
           {data.photo && (
             <img 
               src={data.photo} 
               alt={data.fullName}
-              className="w-24 h-24 object-cover rounded border-2 border-gray-400 flex-shrink-0"
+              className="w-20 h-20 object-cover rounded border-2 border-gray-400 flex-shrink-0"
             />
           )}
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 mb-1">
+            <h1 className="text-2xl font-bold text-gray-900 mb-1">
               {data.fullName}
             </h1>
-            <p className="text-lg text-gray-700 mb-3">{data.title}</p>
+            <p className="text-base text-gray-700 mb-2">{data.title}</p>
           </div>
         </div>
         
-        <div className="text-sm text-gray-700 space-y-1">
+        <div className="text-xs text-gray-700 space-y-1">
           {data.email && <div>Email: {data.email}</div>}
           {data.phone && <div>Phone: {data.phone}</div>}
           {data.location && <div>Location: {data.location}</div>}
@@ -737,34 +737,34 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Profile Summary */}
       {data.summary && (
-        <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-2 uppercase">
+        <div className="mb-4">
+          <h2 className="text-base font-bold text-gray-900 mb-2 uppercase">
             Professional Summary
           </h2>
-          <p className="text-gray-800 leading-relaxed">{data.summary}</p>
+          <p className="text-sm text-gray-800 leading-relaxed">{data.summary}</p>
         </div>
       )}
 
       {/* Work Experience */}
       {data.experience.some(exp => exp.company || exp.position) && (
-        <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-2 uppercase">
+        <div className="mb-4">
+          <h2 className="text-base font-bold text-gray-900 mb-2 uppercase">
             Work Experience
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {data.experience.map((exp, index) => (
               (exp.company || exp.position) && (
                 <div key={index}>
                   <div className="mb-1">
-                    <h3 className="text-base font-bold text-gray-900">{exp.position}</h3>
-                    <p className="text-gray-800">{exp.company}</p>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="text-sm font-bold text-gray-900">{exp.position}</h3>
+                    <p className="text-sm text-gray-800">{exp.company}</p>
+                    <p className="text-xs text-gray-600">
                       {formatDate(exp.startDate)} - {formatDate(exp.endDate)}
                       {exp.location && ` | ${exp.location}`}
                     </p>
                   </div>
                   {exp.description && (
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
                       {exp.description}
                     </p>
                   )}
@@ -777,22 +777,22 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Education */}
       {data.education.some(edu => edu.school || edu.degree) && (
-        <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-2 uppercase">
+        <div className="mb-4">
+          <h2 className="text-base font-bold text-gray-900 mb-2 uppercase">
             Education
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {data.education.map((edu, index) => (
               (edu.school || edu.degree) && (
                 <div key={index}>
-                  <h3 className="text-base font-bold text-gray-900">{edu.degree}</h3>
-                  <p className="text-gray-800">{edu.school}</p>
-                  {edu.field && <p className="text-gray-700">{edu.field}</p>}
-                  <p className="text-sm text-gray-600">
+                  <h3 className="text-sm font-bold text-gray-900">{edu.degree}</h3>
+                  <p className="text-sm text-gray-800">{edu.school}</p>
+                  {edu.field && <p className="text-sm text-gray-700">{edu.field}</p>}
+                  <p className="text-xs text-gray-600">
                     {formatDate(edu.startDate)} - {formatDate(edu.endDate)}
                   </p>
                   {edu.description && (
-                    <p className="text-gray-700 leading-relaxed whitespace-pre-line mt-1">
+                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line mt-1">
                       {edu.description}
                     </p>
                   )}
@@ -805,11 +805,11 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Skills */}
       {data.skills.some(skill => skill.trim()) && (
-        <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-2 uppercase">
+        <div className="mb-4">
+          <h2 className="text-base font-bold text-gray-900 mb-2 uppercase">
             Skills
           </h2>
-          <p className="text-gray-800">
+          <p className="text-sm text-gray-800">
             {data.skills
               .filter(skill => skill.trim())
               .join(" • ")}
@@ -819,15 +819,15 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
 
       {/* Languages */}
       {data.languages.some(lang => lang.name) && (
-        <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-2 uppercase">
+        <div className="mb-4">
+          <h2 className="text-base font-bold text-gray-900 mb-2 uppercase">
             Languages
           </h2>
           <div className="space-y-1">
             {data.languages
               .filter(lang => lang.name)
               .map((lang, index) => (
-                <div key={index} className="text-gray-800">
+                <div key={index} className="text-sm text-gray-800">
                   {lang.name} - {lang.level}
                 </div>
               ))}
@@ -881,7 +881,7 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
       </div>
 
       {/* CV Preview - Template Based with Paper Size */}
-      <div className={`mx-auto bg-white shadow-xl ${getPaperSizeClass()}`}>
+      <div className={`mx-auto bg-white shadow-xl print:shadow-none ${getPaperSizeClass()}`}>
         <style jsx global>{`
           @media print {
             @page {
@@ -889,18 +889,43 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
               margin: 0;
             }
             html, body {
-              width: ${currentPaperSize.width};
-              margin: 0;
-              padding: 0;
+              width: 100% !important;
+              height: 100% !important;
+              margin: 0 !important;
+              padding: 0 !important;
+              overflow: visible !important;
+              background: white !important;
             }
-            .no-print {
-              display: none !important;
+            body * {
+              visibility: hidden;
+            }
+            #cv-content, #cv-content * {
+              visibility: visible;
             }
             #cv-content {
+              position: absolute !important;
+              left: 0 !important;
+              top: 0 !important;
+              width: 100% !important;
+              height: auto !important;
               box-shadow: none !important;
               border-radius: 0 !important;
               margin: 0 !important;
-              padding: 15mm 20mm !important;
+              padding: 10mm 15mm !important;
+              background: white !important;
+            }
+            #cv-content * {
+              box-shadow: none !important;
+              border-radius: 0 !important;
+            }
+            .print-container {
+              box-shadow: none !important;
+              margin: 0 !important;
+              padding: 0 !important;
+            }
+            .no-print {
+              display: none !important;
+              visibility: hidden !important;
             }
           }
           @media screen {
