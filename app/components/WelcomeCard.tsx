@@ -111,6 +111,21 @@ export default function WelcomeCard({ onStartClick, onContinueDraft, onDeleteDra
             </div>
           </div>
         </div>
+        
+        {/* Credits */}
+        <div className="text-center pt-4 border-t border-gray-200">
+          <p className="text-xs text-gray-500">
+            Remake from{" "}
+            <a 
+              href="https://github.com/JastinXyz/cvmaker" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
+            >
+              https://github.com/JastinXyz/cvmaker
+            </a>
+          </p>
+        </div>
       </CardFooter>
     </Card>
   );
