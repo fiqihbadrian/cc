@@ -89,7 +89,7 @@ export default function Home() {
         {currentView !== "preview" && (
           <div className="z-10 w-full max-w-5xl items-center text-center mb-8 no-print">
             <h1 className="text-4xl md:text-6xl font-bold mb-4 text-gray-900">
-              Welcome to CV Maker! 📄
+              Welcome to CV Maker!
             </h1>
             <p className="text-lg md:text-xl text-gray-700">
               Create Your Professional CV in Minutes

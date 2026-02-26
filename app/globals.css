@@ -84,19 +84,5 @@ body {
 
 /* Background Pattern */
 .bg-pattern {
-  background-image: 
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 36px,
-      rgba(0, 0, 0, 0.03) 36px,
-      rgba(0, 0, 0, 0.03) 38px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 36px,
-      rgba(0, 0, 0, 0.03) 36px,
-      rgba(0, 0, 0, 0.03) 38px
-    );
+  background: #f8f7f4;
 }

@@ -14,8 +14,8 @@ export function Button({
   const baseStyles = "inline-flex items-center justify-center font-semibold rounded-lg border-2 border-black transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
   
   const variants = {
-    default: "bg-main text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none",
-    outline: "bg-white text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]",
+    default: "bg-main text-black hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px]",
+    outline: "bg-white text-black hover:translate-x-[2px] hover:translate-y-[2px] active:translate-x-[4px] active:translate-y-[4px]",
     ghost: "border-transparent bg-transparent hover:bg-gray-100"
   };
 

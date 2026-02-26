@@ -41,7 +41,7 @@ export default function WelcomeCard({ onStartClick, onContinueDraft, onDeleteDra
             Create professional CV with ease. Your data is stored locally in your browser.
           </p>
           <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4 space-y-2">
-            <p className="font-semibold text-sm">📝 Notes:</p>
+            <p className="font-semibold text-sm">Notes:</p>
             <ul className="list-disc list-inside ml-4 text-sm text-gray-700 space-y-1">
               <li>All data is stored locally in your browser</li>
               <li>Most fields are optional, fill what you need</li>
@@ -99,13 +99,13 @@ export default function WelcomeCard({ onStartClick, onContinueDraft, onDeleteDra
           <div className="grid grid-cols-2 gap-3 w-full">
             <div className="flex flex-col gap-1">
               <Button onClick={onTryExample} variant="outline" size="md" className="w-full">
-                ✏️ Edit Example
+                <i className="fas fa-pen mr-1"></i> Edit Example
               </Button>
               <p className="text-[10px] text-gray-500 text-center">Fill form with sample</p>
             </div>
             <div className="flex flex-col gap-1">
               <Button onClick={onPreviewExample} variant="outline" size="md" className="w-full">
-                👁️ Preview Example
+                <i className="fas fa-eye mr-1"></i> Preview Example
               </Button>
               <p className="text-[10px] text-gray-500 text-center">See final result</p>
             </div>
@@ -114,7 +114,7 @@ export default function WelcomeCard({ onStartClick, onContinueDraft, onDeleteDra
         
         {/* Credits */}
         <div className="text-center pt-4 border-t border-gray-200">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 mb-1">
             Remake from{" "}
             <a 
               href="https://github.com/JastinXyz/cvmaker" 
@@ -123,6 +123,17 @@ export default function WelcomeCard({ onStartClick, onContinueDraft, onDeleteDra
               className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
             >
               https://github.com/JastinXyz/cvmaker
+            </a>
+          </p>
+          <p className="text-xs text-gray-500">
+            Remade by{" "}
+            <a 
+              href="https://fiqihbadrian.is-a.dev" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
+            >
+              Fiqih Badrian
             </a>
           </p>
         </div>

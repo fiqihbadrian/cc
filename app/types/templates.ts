@@ -12,30 +12,30 @@ export const templates: TemplateInfo[] = [
     id: "modern",
     name: "Modern",
     description: "Bold neobrutalism design",
-    preview: "🎨"
+    preview: "fas fa-paintbrush"
   },
   {
     id: "classic",
     name: "Classic",
     description: "Traditional serif style",
-    preview: "📜"
+    preview: "fas fa-scroll"
   },
   {
     id: "minimal",
     name: "Minimal",
     description: "Clean and spacious",
-    preview: "⚪"
+    preview: "fas fa-circle"
   },
   {
     id: "professional",
     name: "Professional",
     description: "Corporate gradient style",
-    preview: "💼"
+    preview: "fas fa-briefcase"
   },
   {
     id: "ats",
     name: "ATS-Friendly",
     description: "Optimized for job systems",
-    preview: "🤖"
+    preview: "fas fa-robot"
   }
 ];

@@ -150,7 +150,7 @@ export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CV
     // Check if CV is over one page
     if (isOverOnePage) {
       const confirmed = confirm(
-        "⚠️ Warning: Your CV content exceeds 1 page!\n\n" +
+        "Warning: Your CV content exceeds 1 page!\n\n" +
         "Recruiters prefer 1-page CVs for better readability.\n\n" +
         "Recommendations:\n" +
         "• Shorten descriptions\n" +
@@ -248,12 +248,12 @@ export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CV
       <div className="mb-4 text-center min-h-[40px] flex items-center justify-center">
         {isSaving && (
           <span className="inline-block bg-yellow-100 border-2 border-yellow-400 text-yellow-800 px-4 py-2 rounded-lg text-sm font-semibold animate-pulse">
-            💾 Saving draft...
+            <i className="fas fa-floppy-disk mr-1"></i> Saving draft...
           </span>
         )}
         {!isSaving && lastSaved && (
           <span className="inline-block bg-green-100 border-2 border-green-400 text-green-800 px-4 py-2 rounded-lg text-sm font-semibold">
-            ✓ Saved at {lastSaved.toLocaleTimeString()}
+            <i className="fas fa-check mr-1"></i> Saved at {lastSaved.toLocaleTimeString()}
           </span>
         )}
       </div>
@@ -262,7 +262,7 @@ export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CV
       {isOverOnePage && (
         <div className="mb-4 bg-red-50 border-2 border-red-500 rounded-lg p-4 shadow-[4px_4px_0px_0px_rgba(239,68,68,0.5)]">
           <div className="flex items-start gap-3">
-            <span className="text-2xl">⚠️</span>
+            <i className="fas fa-triangle-exclamation text-2xl text-red-600"></i>
             <div className="flex-1">
               <h3 className="font-bold text-red-900 mb-1">Content Exceeds 1 Page!</h3>
               <p className="text-sm text-red-800 mb-2">
@@ -296,7 +296,7 @@ export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CV
                 className="text-sm hover:bg-yellow-50"
                 title="Fill all fields with example data"
               >
-                ✨ Fill with Example
+                Fill with Example
               </Button>
             </div>
           </CardHeader>
@@ -389,12 +389,12 @@ export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CV
                       onClick={handleRemovePhoto}
                       className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-red-600"
                     >
-                      ×
+                      <i className="fas fa-times"></i>
                     </button>
                   </div>
                 ) : (
                   <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
-                    <span className="text-gray-400 text-4xl">📷</span>
+                    <i className="fas fa-camera text-gray-400 text-4xl"></i>
                   </div>
                 )}
                 <div className="flex-1">
@@ -433,7 +433,7 @@ export default function CVForm({ onBack, onSubmit, initialData, onAutoSave }: CV
                         : "border-gray-300 bg-white hover:border-black"
                     }`}
                   >
-                    <div className="text-lg font-bold mb-1">{template.preview}</div>
+                    <div className="text-2xl mb-2"><i className={template.preview}></i></div>
                     <div className="text-sm font-semibold mb-1">{template.name}</div>
                     <div className="text-xs text-gray-600">{template.description}</div>
                   </button>

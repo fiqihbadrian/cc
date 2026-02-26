@@ -94,37 +94,37 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
           {data.email && (
             <div className="flex items-center gap-2">
-              <span className="font-semibold">✉️ Email:</span>
+              <span className="font-semibold">Email:</span>
               <span>{data.email}</span>
             </div>
           )}
           {data.phone && (
             <div className="flex items-center gap-2">
-              <span className="font-semibold">📱 Phone:</span>
+              <span className="font-semibold">Phone:</span>
               <span>{data.phone}</span>
             </div>
           )}
           {data.location && (
             <div className="flex items-center gap-2">
-              <span className="font-semibold">📍 Location:</span>
+              <span className="font-semibold">Location:</span>
               <span>{data.location}</span>
             </div>
           )}
           {data.website && (
             <div className="flex items-center gap-2">
-              <span className="font-semibold">🌐 Website:</span>
+              <span className="font-semibold">Website:</span>
               <span>{data.website.replace(/^https?:\/\//, '')}</span>
             </div>
           )}
           {data.linkedin && (
             <div className="flex items-center gap-2">
-              <span className="font-semibold">💼 LinkedIn:</span>
+              <span className="font-semibold">LinkedIn:</span>
               <span>{data.linkedin.replace(/^https?:\/\/(www\.)?/, '')}</span>
             </div>
           )}
           {data.github && (
             <div className="flex items-center gap-2">
-              <span className="font-semibold">💻 GitHub:</span>
+              <span className="font-semibold">GitHub:</span>
               <span>{data.github.replace(/^https?:\/\/(www\.)?/, '')}</span>
             </div>
           )}
@@ -266,12 +266,12 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
         <p className="text-lg md:text-xl text-blue-700 mb-3 italic">{data.title}</p>
         
         <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-700">
-          {data.email && <span>✉️ {data.email}</span>}
-          {data.phone && <span>📱 {data.phone}</span>}
-          {data.location && <span>📍 {data.location}</span>}
-          {data.website && <span>🌐 {data.website.replace(/^https?:\/\//, '')}</span>}
-          {data.linkedin && <span>💼 {data.linkedin.replace(/^https?:\/\/(www\.)?/, '')}</span>}
-          {data.github && <span>💻 {data.github.replace(/^https?:\/\/(www\.)?/, '')}</span>}
+          {data.email && <span>{data.email}</span>}
+          {data.phone && <span>{data.phone}</span>}
+          {data.location && <span>{data.location}</span>}
+          {data.website && <span>{data.website.replace(/^https?:\/\//, '')}</span>}
+          {data.linkedin && <span>{data.linkedin.replace(/^https?:\/\/(www\.)?/, '')}</span>}
+          {data.github && <span>{data.github.replace(/^https?:\/\/(www\.)?/, '')}</span>}
         </div>
       </div>
 
@@ -548,12 +548,12 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-blue-100">
-          {data.email && <div>✉️ {data.email}</div>}
-          {data.phone && <div>📱 {data.phone}</div>}
-          {data.location && <div>📍 {data.location}</div>}
-          {data.website && <div>🌐 {data.website.replace(/^https?:\/\//, '')}</div>}
-          {data.linkedin && <div>💼 {data.linkedin.replace(/^https?:\/\/(www\.)?/, '')}</div>}
-          {data.github && <div>💻 {data.github.replace(/^https?:\/\/(www\.)?/, '')}</div>}
+          {data.email && <div>{data.email}</div>}
+          {data.phone && <div>{data.phone}</div>}
+          {data.location && <div>{data.location}</div>}
+          {data.website && <div>{data.website.replace(/^https?:\/\//, '')}</div>}
+          {data.linkedin && <div>{data.linkedin.replace(/^https?:\/\/(www\.)?/, '')}</div>}
+          {data.github && <div>{data.github.replace(/^https?:\/\/(www\.)?/, '')}</div>}
         </div>
       </div>
 
@@ -845,7 +845,7 @@ export default function CVPreview({ data, onBack, onEdit }: CVPreviewProps) {
             Edit CV
           </Button>
           <Button onClick={handleDownload}>
-            📥 Download PDF
+            <i className="fas fa-download mr-1"></i> Download PDF
           </Button>
         </div>
       </Card>
